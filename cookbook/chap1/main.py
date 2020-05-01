@@ -132,3 +132,82 @@
 #
 # ivals = list(filter(is_int, values))
 # print(ivals)
+
+# 1.17. Extracting a Subset of a Dictionary
+# prices = {
+#     'ACME': 45.23,
+#     'AAPL': 612.78,
+#     'IBM': 205.55,
+#     'HPQ': 37.20,
+#     'FB': 10.75
+# }
+#
+# # Make a dictionary of all prices over 200
+# p1 = {key: prices[key] for key in prices.keys() if prices[key] > 200}
+# p1 = {key: value for key, value in prices.items() if value > 200}
+#
+# # Make a dictionary of tech stocks
+# tech_names = {'AAPL', 'IBM', 'HPQ', 'MSFT'}
+# p2 = {key: value for key, value in prices.items() if key in tech_names}
+
+
+# 1.18. Mapping Names to Sequence Elements
+# from collections import namedtuple
+#
+# Subscriber = namedtuple('Subscriber', ['addr', 'joined'])
+# sub = Subscriber('jonesy@example.com', '2012-10-19')
+# sub
+# sub.addr
+# sub.joined
+# len(sub)
+#
+# Stock = namedtuple('Stock', ['name', 'shares', 'price', 'date', 'time'])
+# # Create a prototype instance
+# stock_prototype = Stock('', 0, 0.0, None, None)
+# # Function to convert a dictionary to a Stock
+# def dict_to_stock(s):
+#     return stock_prototype._replace(**s)
+#
+# a = {'name': 'ACME', 'shares': 100, 'price': 123.45}
+# dict_to_stock(a)
+
+
+# 1.19. Transforming and Reducing Data at the Same Time
+# nums = [1, 2, 3, 4, 5]
+# # bad performance
+# s = sum([x * x for x in nums])
+# # recommend
+# s = sum(x * x for x in nums)  # equivalent to sum((x * x for x in nums))
+
+
+# 1.20. Combining Multiple Mappings into a Single Mapping
+# from collections import ChainMap
+#
+# a = {'x': 1, 'z': 3}
+# b = {'y': 2, 'z': 4}
+# c = ChainMap(a, b)
+# c
+# c['z'] = 10
+# c['w'] = 40
+# del c['x']
+# a
+#
+# values = ChainMap()
+# values['x'] = 1
+# # Add a new mapping
+# values = values.new_child()
+# values['x'] = 2
+# # Add a new mapping
+# values = values.new_child()
+# values['x'] = 3
+# values
+# ChainMap({'x': 3}, {'x': 2}, {'x': 1})
+# values['x']  # 3
+# # Discard last mapping
+# values = values.parents
+# values['x']  # 2
+# # Discard last mapping
+# values = values.parents
+# values['x']  # 1
+# values
+# ChainMap({'x': 1})
