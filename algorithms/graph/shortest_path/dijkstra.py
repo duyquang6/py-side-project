@@ -29,8 +29,14 @@ def dijkstra(adj, x):
     distance = [math.inf]*V
     distance[x] = 0
     pq.push(x, 0)
+    processed = [False]*V
     while not pq.is_empty():
+        # Get Min distance vertex
         a = pq.pop()
+        if processed[a]:
+            continue
+        processed[a] = True
+        # for each neighbor, re-calc distance from start_node, if it is, add it to queue to next process
         for u in adj[a]:
             b, w = u
             if distance[a] + w < distance[b]:
@@ -55,4 +61,4 @@ if __name__ == "__main__":
     add_edge(adj, 2, 3, 6)
     add_edge(adj, 1, 2, 2)
 
-    print(dijkstra(adj,0))
+    print(dijkstra(adj, 0))
