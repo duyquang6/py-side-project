@@ -94,7 +94,7 @@ def convert_adj_matrix_to_adj_list(adj_matrix):
 def convert_adj_to_edge_list(adj):
     V = len(adj)
     edge_list = []
-    for u in range(len(adj)):
+    for u in range(V):
         # v is u neighbor
         for v in adj[u]:
             edge_list.append((u, v))

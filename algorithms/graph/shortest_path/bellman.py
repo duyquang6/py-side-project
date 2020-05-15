@@ -21,22 +21,34 @@ class PriorityQueue:
         return not len(self._queue)
 
 
-def dijkstra(adj, x):
-    # adj: adjacent list of graph
-    # x: start node
-    pq = PriorityQueue()
+def bellman_ford(edges, V, x):
+    dist = [math.inf] * V
+    dist[x] = 0
+    for _ in range(V-1):
+        for u, v, w in edges:
+            dist[v] = min(dist[v], dist[u]+w)
+    return dist
+
+
+def detect_negative_cycle(edges, V, x):
+    dist = [math.inf] * V
+    dist[x] = 0
+    for i in range(V):
+        for u, v, w in edges:
+            if i == V-1 and dist[v] > dist[u]+w:
+                return True
+            dist[v] = min(dist[v], dist[u]+w)
+    return False
+
+
+def convert_adj_to_edge_list(adj):
     V = len(adj)
-    distance = [math.inf]*V
-    distance[x] = 0
-    pq.push(x, 0)
-    while not pq.is_empty():
-        a = pq.pop()
-        for u in adj[a]:
-            b, w = u
-            if distance[a] + w < distance[b]:
-                distance[b] = distance[a] + w
-                pq.push(b, -distance[b])
-    return distance
+    edge_list = []
+    for u in range(V):
+        # v is u neighbor
+        for v, w in adj[u]:
+            edge_list.append((u, v, w))
+    return edge_list
 
 
 def add_edge(adj: [[int]], u: int, v: int, w: int):
@@ -54,5 +66,6 @@ if __name__ == "__main__":
     add_edge(adj, 4, 3, 2)
     add_edge(adj, 2, 3, 6)
     add_edge(adj, 1, 2, 2)
-
-    print(dijkstra(adj,0))
+    edge_list_form = convert_adj_to_edge_list(adj)
+    print(bellman_ford(edge_list_form, V, 0))
+    print(detect_negative_cycle(edge_list_form, V, 0))
