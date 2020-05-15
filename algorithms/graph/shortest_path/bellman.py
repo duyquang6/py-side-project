@@ -1,4 +1,4 @@
-# dijkstra using adjancent list because it loop through vertex and determine final cost on that each vertex
+# beellman using edge list 
 
 
 import math

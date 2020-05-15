@@ -1,42 +1,33 @@
-# dijkstra using adjancent list because it loop through vertex and determine final cost on that each vertex
-
-
+# floyd-warshall using adjancent matrix to find shortest path between any two node
 import math
-import heapq
+import pprint
+
+def floyd_warshall(adj_matrix):
+    V = len(adj_matrix)
+    dist = [[math.inf] * V for _ in range(V)]
+    for i in range(V):
+        for j in range(V):
+            if adj_matrix[i][j]:
+                dist[i][j] = adj_matrix[i][j]
+            elif i == j:
+                dist[i][j] = 0
+
+    for v in range(V):
+        for i in range(V):
+            for j in range(V):
+                dist[i][j] = min(dist[i][v] + dist[v][j], dist[i][j])
+    return dist
 
 
-class PriorityQueue:
-    def __init__(self):
-        self._queue = []
-        self._index = 0
-
-    def push(self, item, priority):
-        heapq.heappush(self._queue, (-priority, self._index, item))
-        self._index += 1
-
-    def pop(self):
-        return heapq.heappop(self._queue)[-1]
-
-    def is_empty(self):
-        return not len(self._queue)
-
-
-def dijkstra(adj, x):
-    # adj: adjacent list of graph
-    # x: start node
-    pq = PriorityQueue()
+def convert_adj_list_to_adj_matrix(adj):
     V = len(adj)
-    distance = [math.inf]*V
-    distance[x] = 0
-    pq.push(x, 0)
-    while not pq.is_empty():
-        a = pq.pop()
-        for u in adj[a]:
-            b, w = u
-            if distance[a] + w < distance[b]:
-                distance[b] = distance[a] + w
-                pq.push(b, -distance[b])
-    return distance
+    adj_matrix = [[0]*V for _ in range(V)]
+    for u in range(len(adj)):
+        # v is u neighbor
+        for v,w in adj[u]:
+            adj_matrix[u][v] = w
+
+    return adj_matrix
 
 
 def add_edge(adj: [[int]], u: int, v: int, w: int):
@@ -55,4 +46,5 @@ if __name__ == "__main__":
     add_edge(adj, 2, 3, 6)
     add_edge(adj, 1, 2, 2)
 
-    print(dijkstra(adj,0))
+    adj_matrix = convert_adj_list_to_adj_matrix(adj)
+    pprint.pprint(floyd_warshall(adj_matrix))

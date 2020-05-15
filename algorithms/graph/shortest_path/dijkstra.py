@@ -1,9 +1,6 @@
 # dijkstra using adjancent list because it loop through vertex and determine final cost on that each vertex
-
-
 import math
 import heapq
-
 
 class PriorityQueue:
     def __init__(self):
