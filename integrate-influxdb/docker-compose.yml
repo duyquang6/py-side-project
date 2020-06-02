@@ -1,0 +1,50 @@
+version: '2'
+services:
+#  pluton:
+#    image: tikivn/pluton:alpine-2
+#    environment:
+#      - TK_INFLUXDB_URL=http://influxdb.dev.tiki.services:8086
+#    ports:
+#      - "8125:8125"
+#      - "8125:8125/udp"
+
+  influxdb:
+    container_name: influxdb
+    image: influxdb:1.7.10
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+    volumes:
+      - ./volumes/influxdb:/var/lib/influxdb
+    networks:
+      - influx
+
+  telegraf:
+    container_name: telegraf
+    image: telegraf:1.13.3
+    depends_on:
+      - influxdb
+    ports:
+      - "8125:8125"
+      - "8125:8125/udp"
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - influx
+
+  chronograf:
+    image: chronograf:latest
+    ports:
+      - '8888:8888'
+    volumes:
+      - ./chronograf-storage:/var/lib/chronograf
+    depends_on:
+      - influxdb
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+    networks:
+      - influx
+
+networks:
+  influx:

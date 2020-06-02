@@ -1,2 +1,8 @@
 .vscode
 .idea
+integrate-influxdb/volumes
+integrate-influxdb/conf
+integrate-influxdb/src
+integrate-influxdb/chronograf-storage
+
+
